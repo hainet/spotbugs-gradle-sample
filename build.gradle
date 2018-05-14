@@ -1,0 +1,46 @@
+group 'com.hainet'
+version '1.0.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.1"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: "com.github.spotbugs"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    // (Optional)
+    // Settings Guide
+    // https://docs.gradle.org/current/userguide/findbugs_plugin.html
+    // Migration from FindBugs Guide
+    // http://spotbugs.readthedocs.io/ja/latest/migration.html
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+spotbugs {
+    // (Optional)
+    // http://spotbugs.readthedocs.io/en/latest/filter.html
+    // Exclude specific language like kotlin.
+    excludeFilter = file("${project.rootDir}/config/spotbugs/spotbugs_filter.xml")
+}
